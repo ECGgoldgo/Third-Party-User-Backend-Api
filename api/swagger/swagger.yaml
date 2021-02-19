@@ -1,0 +1,183 @@
+swagger: "2.0"
+info:
+  version: "0.0.1"
+  title: GoldGo Rest API's
+# during dev, should point to your local machine
+#host: localhost:3001
+# basePath prefixes all resource paths
+basePath: /
+#
+schemes:
+  # tip: remove http to make production-grade
+  - https
+# format of bodies a client can send (Content-Type)
+consumes:
+  - application/json
+# format of the responses to the client (Accepts)
+produces:
+  - application/json
+paths:
+  #========================= User Module ==================================#
+
+  # /api/v1/users/register:
+  #   post:
+  #     summary: Register user
+  #     parameters:
+  #       - in: body
+  #         name: Register parameters
+  #         description: Parameters passed for Register.
+  #         schema:
+  #           type: object
+  #           required:
+  #             - name
+  #             - email
+  #           properties:
+  #             name:
+  #               type: string
+  #             email:
+  #               type: string
+  #     tags:
+  #       - User Module
+  #     responses:
+  #       200:
+  #         description: Your account created successsfully.
+
+  /api/v1/users/balance/{address}:
+    get:
+      summary: Get balance
+      parameters:
+        - in: header
+          name: Authorization
+          description: Add Access Token Here
+          schema:
+            type: object
+            default: eyJhbGciOiJIUzI1NiJ9.MjU.7dNuzROvSATT4iYMVH7OXcJogoTc8eySZbbzTwfOsUk
+            required:
+              - Authorization
+            properties:
+              Authorization:
+                type: string
+        - in: path
+          name: address
+          description: address for check balance
+          schema:
+            type: string
+      tags:
+        - Balance Module
+      responses:
+        200:
+          description: success.
+
+  /api/v1/price/detail:
+    get:
+      summary: Get price detail
+      parameters:
+        - in: header
+          name: Authorization
+          description: Add Access Token Here
+          schema:
+            type: object
+            default: eyJhbGciOiJIUzI1NiJ9.MjU.7dNuzROvSATT4iYMVH7OXcJogoTc8eySZbbzTwfOsUk
+            required:
+              - Authorization
+            properties:
+              Authorization:
+                type: string
+      tags:
+        - Price Module
+      responses:
+        200:
+          description: success.
+
+  /api/v1/transaction/list:
+    post:
+      summary: Get transaction list
+      parameters:
+        - in: header
+          name: Authorization
+          description: Add Access Token Here
+          schema:
+            type: object
+            default: eyJhbGciOiJIUzI1NiJ9.MjU.7dNuzROvSATT4iYMVH7OXcJogoTc8eySZbbzTwfOsUk
+            required:
+              - Authorization
+            properties:
+              Authorization:
+                type: string
+        - in: body
+          name: Get transactions parameters
+          description: Parameters passed for get transactions
+          schema:
+            type: object
+            properties:
+              _from:
+                type: string
+              _to:
+                type: string
+              _fromblock:
+                type: string
+              _toblock:
+                type: string
+      tags:
+        - Transaction Module
+      responses:
+        200:
+          description: Transactions detail get successsfully.
+
+  # /api/v1/cloudhsm/saveConfig:
+  #   post:
+  #     summary: Save cloud hsm configuration
+  #     parameters:
+  #       - in: header
+  #         name: Authorization
+  #         description: Add Access Token Here
+  #         schema:
+  #           type: object
+  #           default: eyJhbGciOiJIUzI1NiJ9.MjU.7dNuzROvSATT4iYMVH7OXcJogoTc8eySZbbzTwfOsUk
+  #           required:
+  #             - Authorization
+  #           properties:
+  #             Authorization:
+  #               type: string
+  #       - in: body
+  #         name: Save cloud hsm configuration parameters
+  #         description: Parameters passed for save cloud hsm configuration
+  #         schema:
+  #           type: object
+  #           required:
+  #             # - exchange_id
+  #             - cloud_config_name
+  #             - service_key_name
+  #             - target_address
+  #             - azure_user_id
+  #             - azure_user_secret
+  #             - subscription_id
+  #             - tenant_id
+  #             - vault_name
+  #             - public_address
+  #           properties:
+  #             # exchange_id:
+  #             #   type: integer
+  #             cloud_config_name:
+  #               type: string
+  #             service_key_name:
+  #               type: string
+  #             target_address:
+  #               type: string
+  #             azure_user_id:
+  #               type: string
+  #             azure_user_secret:
+  #               type: string
+  #             subscription_id:
+  #               type: string
+  #             tenant_id:
+  #               type: string
+  #             vault_name:
+  #               type: string
+  #             public_address:
+  #               type: string
+  #     tags:
+  #       - Cloud Hsm Module
+  #     responses:
+  #       200:
+  #         description: Cloud hsm configuration has been saved.

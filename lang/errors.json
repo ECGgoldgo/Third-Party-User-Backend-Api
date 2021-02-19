@@ -1,0 +1,138 @@
+{
+  "middleware": {
+    "email_required": {
+      "_comment": "When email is empty",
+      "code": 400,
+      "name": "errorRequired",
+      "internal_code": 140,
+      "message": "field is required"
+    },
+    "password_required": {
+      "_comment": "When password is empty",
+      "code": 400,
+      "name": "errorRequired",
+      "internal_code": 140,
+      "message": "field is required"
+    },
+    "name_required": {
+      "_comment": "When Name is empty",
+      "code": 400,
+      "name": "errorRequired",
+      "internal_code": 140,
+      "message": "field is required"
+    },
+    "exchange_id_required": {
+      "_comment": "When Exchange id is empty",
+      "code": 400,
+      "name": "errorRequired",
+      "internal_code": 140,
+      "message": "field is required"
+    },
+    "cloud_config_name_required": {
+      "_comment": "When Cloud config name is empty",
+      "code": 400,
+      "name": "errorRequired",
+      "internal_code": 140,
+      "message": "field is required"
+    },
+    "service_key_name_required": {
+      "_comment": "When Service key name is empty",
+      "code": 400,
+      "name": "errorRequired",
+      "internal_code": 140,
+      "message": "field is required"
+    },
+    "target_address_required": {
+      "_comment": "When Target address is empty",
+      "code": 400,
+      "name": "errorRequired",
+      "internal_code": 140,
+      "message": "field is required"
+    },
+    "azure_user_id_required": {
+      "_comment": "When Azure user id is empty",
+      "code": 400,
+      "name": "errorRequired",
+      "internal_code": 140,
+      "message": "field is required"
+    },
+    "azure_user_secret_required": {
+      "_comment": "When Azure user secret is empty",
+      "code": 400,
+      "name": "errorRequired",
+      "internal_code": 140,
+      "message": "field is required"
+    },
+    "subscription_id_required": {
+      "_comment": "When subscription id is empty",
+      "code": 400,
+      "name": "errorRequired",
+      "internal_code": 140,
+      "message": "field is required"
+    },
+    "tenant_id_required": {
+      "_comment": "When tenant id is empty",
+      "code": 400,
+      "name": "errorRequired",
+      "internal_code": 140,
+      "message": "field is required"
+    },
+    "vault_name_required": {
+      "_comment": "When valut name is empty",
+      "code": 400,
+      "name": "errorRequired",
+      "internal_code": 140,
+      "message": "field is required"
+    },
+    "transactionHash_required": {
+      "_comment": "When Transaction hash is empty",
+      "code": 400,
+      "name": "errorRequired",
+      "internal_code": 140,
+      "message": "field is required"
+    },
+    "to_address_required": {
+      "_comment": "When to address is empty",
+      "code": 400,
+      "name": "errorRequired",
+      "internal_code": 140,
+      "message": "field is required"
+    },
+    "from_address_required": {
+      "_comment": "When from address is empty",
+      "code": 400,
+      "name": "errorRequired",
+      "internal_code": 140,
+      "message": "field is required"
+    },
+    "block_id_required": {
+      "_comment": "When block id is empty",
+      "code": 400,
+      "name": "errorRequired",
+      "internal_code": 140,
+      "message": "field is required"
+    },
+    "block_hash_required": {
+      "_comment": "When block hash is empty",
+      "code": 400,
+      "name": "errorRequired",
+      "internal_code": 140,
+      "message": "field is required"
+    },
+    "amount_required": {
+      "_comment": "When amount is empty",
+      "code": 400,
+      "name": "errorRequired",
+      "internal_code": 140,
+      "message": "field is required"
+    },
+    "address_required": {
+      "name": "errorRequired",
+      "message": "Address field is required"
+    },
+    "wallet_name_required": {
+      "name": "errorRequired",
+      "message": "Wallet name field is required"
+    }
+  }
+}

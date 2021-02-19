@@ -1,0 +1,577 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: GoldGo Rest API's
+  description: These are goldgo rest apis which can be applied to easily interact with the Goldgo smart contract functions and pricing data available in Goldgo system
+  "x-logo": {
+    "url": "images/goldgo-logo.png",
+    "altText": "Goldgo Logo",
+    # "backgroundColor": "#3942c1"
+  }
+servers:
+  - url: http://dev-rest-api.goldgo.io
+    # description: Optional server description, e.g. Main (production) server
+  - url : https://gogoadmin-eval-prod.apigee.net
+    # description: Optional server description, e.g. Internal staging server for testing
+
+  
+# Basic authentication
+# components:
+#   securitySchemes:
+#     ApiKeyAuth:
+#       type: apiKey
+#       in: header
+#       name: Authorization
+# security:
+#   - ApiKeyAuth: []
+
+paths:
+  /api/v1/price/detail:
+    get:
+      summary: This endpoint allows you to fetch the Goldgo marketplace gold price and GTA gold price 
+      parameters:
+        - in: header
+          name: Authorization
+          # description: Your access token ("Standard" API key) should be applied for the authentication of API request
+          schema:
+            type: string
+            default: eyJhbGciOiJIUzI1NiJ9.MjU.7dNuzROvSATT4iYMVH7OXcJogoTc8eySZbbzTwfOsUk
+          required: true
+      tags:
+        - Gold Price from Goldgo Marketpalce & GTA           
+      responses:
+        '200':
+          description: {}
+        "400":
+          description: Bad Request
+
+  /api/v1/users/balance/{address}:
+    get:
+      summary: This endpoint allows to check the Gogo Balance for a particular address.
+      parameters:
+        - in: header
+          name: Authorization
+          description: Your access token ("Standard" API key) should be applied for the authentication of API request
+          schema:
+            type: string
+            default: eyJhbGciOiJIUzI1NiJ9.MjU.7dNuzROvSATT4iYMVH7OXcJogoTc8eySZbbzTwfOsUk
+          required: true
+        - in: path
+          required: true
+          name: address
+          description: Wallet address of the account whose GOGO balance you want to check
+          schema:
+            type: string
+      tags:
+        - Check Balance Of Address(Standard)
+      responses:
+        "200":
+          description: {}
+        "400":
+          description: Bad Request
+
+  /api/v1/transaction/list:
+    post:
+      summary: This endpoint allows you to retrieve all Gogo transfer transactions for the specified sender or receiver address in the specified period of time (defined by the starting and ending block numbers)  
+      parameters:
+        - in: header
+          name: Authorization
+          description: Your access token ("Standard" API key) should be applied for the authentication of API request
+          schema:
+            type: string
+            default: eyJhbGciOiJIUzI1NiJ9.MjU.7dNuzROvSATT4iYMVH7OXcJogoTc8eySZbbzTwfOsUk
+          required: true
+
+      requestBody: 
+        required: true
+        content: 
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Transaction_List"
+      tags:
+        - Get Transaction List
+      responses:
+        "200":
+          description: {}
+        "400":
+          description: Bad Request
+
+  /dev-v1/balanceOf:
+    get:
+      summary: This endpoint allows to check the Gogo Balance for a particular address.
+      description: This endpoint allows to check the Gogo Balance for a particular address.
+      parameters:
+        - in: header
+          name: Authorization
+          description: The JWT token is applied for the authentication and authorization
+          schema:
+            type: string
+          required: true
+
+        - in: query
+          name: account
+          schema:
+            type: string
+          description: The public key (account address), which token balance you want to check
+          required: true
+        
+        - in: query
+          name: kld-from
+          schema:
+            type: string
+          description: The public key of your wallet address
+          required: true
+
+      tags:
+        - Check Balance Of Address(JWT Token)
+      responses:
+        "200":
+          description: {"output": "string"}
+        "500":
+          description: {"error": "Method 'balanceOf' param 0: Could not be converted to a hex address (supplied=string)"}
+
+  /dev-v1/totalSupply:
+    get:
+      summary: This endpoint allows you to retrieve information about the total supply of Gogo tokens which is equivalent to the total weight of the gold (gram gold) circulating in the Goldgo ecosystem. 
+      parameters:
+        - in: header
+          name: Authorization
+          description: The JWT token is applied for the authentication and authorization
+          schema:
+            type: string
+          required: true
+
+        - in: query
+          name: kld-from
+          schema:
+            type: string
+          description: The public key of your wallet address
+          required: true
+
+      tags:
+        - Check Total Gogo Supply
+      responses:
+        "200":
+          description: {"output": "string"}
+        "500":
+          description: {"error": "Method 'balanceOf' param 0: Could not be converted to a hex address (supplied=string)"}
+
+  /dev-v1/whitelistAddresses:
+    post:
+      summary: This endpoint allows to whitelist user address in the Goldgo smart contract. As long as the addresses are not whitelisted they can not receive or send goldgo token.   
+      parameters:
+        - in: header
+          name: Authorization
+          description: The JWT token is applied for the authentication and authorization
+          schema:
+            type: string
+          required: true
+
+        - in: query
+          name: kld-sync
+          schema:
+            type: string
+            default : true
+          description: Configurates whether the transaction needs to be submitted synchronous or asynchronous way.
+          required: true
+        
+        - in: query
+          name: kld-from
+          schema:
+            type: string
+          description: The public key of your wallet address
+          required: true
+
+      requestBody: 
+        required: true
+        content: 
+          application/json:
+            schema:
+              $ref: "#/components/schemas/whitelist_account"
+              
+      tags:
+        - Whitelist Account
+      responses:
+        "200":
+          description: OK
+        "500":
+          description: {"error": "Sender does not have required account type"}
+
+  /dev-v1/blacklistAddresses:
+    post:
+      summary: This endpoint allows the account with KYC operator permissions to blacklist another account. The blacklisting removes whitelisted property from the previously whitelisted account. The blacklisted account can not receive or send Gogo Token any more.  
+      parameters:
+        - in: header
+          name: Authorization
+          description: The JWT token is applied for the authentication and authorization
+          schema:
+            type: string
+          required: true
+
+        - in: query
+          name: kld-sync
+          schema:
+            type: string
+            default : true
+          description: Configurate whether the transactions needs to be submitted in a synchronous or asynchronous way
+          required: true
+        
+        - in: query
+          name: kld-from
+          schema:
+            type: string
+          description: The public key of your wallet address
+          required: true
+
+        - in: body
+          name: _addr
+          description: The public address of the account which is being blacklisted.
+          schema:
+            type: object
+            properties:
+              _addr:
+                type: string
+      tags:
+        - Blacklist Account
+      responses:
+        "200":
+          description: OK
+        "500":
+          description: {"error": "Sender does not have required account type"}
+
+  /dev-v1/whitelisted:
+    get:
+      summary: This endpoint allows you to check whether a particular address has been whitelisted before or not.  
+      parameters:
+        - in: header
+          name: Authorization
+          description: The JWT token is applied for the authentication and authorization
+          schema:
+            type: string
+          required: true
+        
+        - in: query
+          name: kld-from
+          schema:
+            type: string
+          description: The public key of your wallet address
+          required: true
+
+        - in: query
+          name: input
+          description: The public address of the wallet whose whitelisting status you are trying to check.
+          schema:
+            type: object
+            properties:
+              _addr:
+                type: string
+      tags:
+        - Check Whitelisting Status
+      responses:
+        "200":
+          description: OK
+        "500":
+          description: {"error": "Sender does not have required account type"}
+
+  /dev-v1/transfer:
+    post:
+      summary: This endpoint allows you to transfer Gogo token from your address to another wallet address.    
+      parameters:
+        - in: header
+          name: Authorization
+          description: The JWT token is applied for the authentication and authorization
+          schema:
+            type: string
+          required: true
+        
+        - in: query
+          name: kld-sync
+          schema:
+            type: string
+            default : true
+          description: Configurate whether the transactions needs to be submitted in a synchronous or asynchronous way 
+          required: true
+
+        - in: query
+          name: kld-from
+          schema:
+            type: string
+          description: The public key of your wallet address
+          required: true
+
+        - in: body
+          name: _value
+          description: The amount of token you want to send 
+          schema:
+            type: object
+            properties:
+              _addr:
+                type: string
+
+        - in: body
+          name: _to
+          description: The address to whom you want to send tokens to 
+          schema:
+            type: object
+            properties:
+              _addr:
+                type: string
+
+      tags:
+        - Transfer Gogo
+      responses:
+        "200":
+          description: OK
+        "500":
+          description: {"error": "Address is not whitelisted"}
+
+  /dev-v1/getAddressOfMinterById:
+    get:
+      summary: This endpoint allows you to see the public address of the goldsmith shop or custodian service provider via the application of miner ID as a parameter.    
+      parameters:
+        - in: header
+          name: Authorization
+          description: The JWT token is applied for the authentication and authorization
+          schema:
+            type: string
+          required: true
+
+        - in: query
+          name: _id
+          schema:
+            type: string
+            default : true
+          description: The ID of the goldsmith shop or custodian service provider
+          required: true
+        
+        - in: query
+          name: kld-from
+          schema:
+            type: string
+          description: The public key of your wallet address
+          required: true
+
+      tags:
+        - Get Address Of Minter By Id
+      responses:
+        "200":
+          description: OK
+        "404":
+          description: {"res":"null"}
+
+  /dev-v1/getRate:
+    get:
+      summary: This endpoint allows you to get information about the transfer fee rate that we will be charged on a transaction with a particular sender and receiver    
+      parameters:
+        - in: header
+          name: Authorization
+          description: The JWT token is applied for the authentication and authorization
+          schema:
+            type: string
+          required: true
+
+        - in: query
+          name: _src
+          schema:
+            type: string
+            default : true
+          description: Public key of the wallet address of the sender 
+          required: true
+        
+        - in: query
+          name: _dest
+          schema:
+            type: string
+          description: Public key of the wallet address of the receiver
+          required: true
+
+        - in: query
+          name: kld-from
+          schema:
+            type: string
+          description: Public key of your wallet address
+          required: true
+        
+      tags:
+        - Get Transfer Fee Rate
+      responses:
+        "200":
+          description: OK
+        "404":
+          description: {"error": "string"}
+
+  /dev-v1/getTxnFee:
+    get:
+      summary: This endpoint allows you to get information on how much is the  transfer fee for a transaction with a particular sender and receiver and for a particular amount     
+      parameters:
+        - in: header
+          name: Authorization
+          description: The JWT token is applied for the authentication and authorization
+          schema:
+            type: string
+          required: true
+
+        - in: query
+          name: _from
+          schema:
+            type: string
+            default : true
+          description: The public key of the sender's wallet address 
+          required: true
+        
+        - in: query
+          name: _to
+          schema:
+            type: string
+          description: The public key of the receiver's wallet address
+          required: true
+
+        - in: query
+          name: _amount
+          schema:
+            type: string
+          description: Transfer Amount
+          required: true
+        
+
+        - in: query
+          name: _minimum
+          schema:
+            type: string
+            default : 1
+          description: The minimum about of the transfer
+          required: true
+
+
+        - in: query
+          name: kld-from
+          schema:
+            type: string
+          description: The public key of your wallet address 
+          required: true
+
+      tags:
+        - Get Info On Transaction Fee
+      responses:
+        "200":
+          description: OK
+        "404":
+          description: {"error": "string"}
+
+  /dev-v1/getHoldingFeeRate:
+    get:
+      summary: This endpoint allows you to fetch information on what is the holding fee rate for a particular account.     
+      parameters:
+        - in: header
+          name: Authorization
+          description: The JWT token is applied for the authentication and authorization
+          schema:
+            type: string
+          required: true
+
+        - in: query
+          name: _target
+          schema:
+            type: string
+            default : true
+          description: The Wallet Address of the account for which you want to find what is the applicable holding fee rate 
+          required: true
+        
+        - in: query
+          name: kld-from
+          schema:
+            type: string
+          description: The public key of your wallet address 
+          required: true
+
+      tags:
+        - Get Holding Fee Rate
+      responses:
+        "200":
+          description: OK
+        "404":
+          description: {"error": "string"}
+
+  /dev-v1/holdingFeeOwedOnBalance:
+    get:
+      summary: This endpoint allows you to get information regarding accumulated holding fee in a particular address     
+      parameters:
+        - in: header
+          name: Authorization
+          description: The JWT token is applied for the authentication and authorization
+          schema:
+            type: string
+          required: true
+
+        - in: query
+          name: _target
+          schema:
+            type: string
+            default : true
+          description: The account address where we want to check the accumulated holding fee 
+          required: true
+        
+        - in: query
+          name: _balance
+          schema:
+            type: string
+            default : true
+          description: Balance of the target account 
+          required: true
+
+        - in: query
+          name: kld-from
+          schema:
+            type: string
+          description: The public key of your wallet address 
+          required: true
+
+      tags:
+        - Get_Holding_Fee_Rate
+      responses:
+        "200":
+          description: OK
+        "404":
+          description: {"error": "string"}
+
+components: 
+  schemas: 
+    Error: 
+      type: object
+      properties:
+        errorMessage: 
+          type: "string"
+      
+    Transaction_List: 
+      type: object
+      properties: 
+        _from: 
+          description: User defined name for API Key
+          type: string
+        _to: 
+          type: string
+        _fromblock: 
+          type: string
+        _toblock: 
+          type: string
+      # required: [
+      #     "_from"
+      #   ]
+
+    whitelist_account: 
+      type: object
+      properties: 
+        _addr: 
+          description: The address which is being whitelisted
+          type: string
+      required: ["_addr"] 
+
+  responses:
+    NotFound: 
+      description: Application Credential Not Found
+    InternalError: 
+      description: Internal Error
+      content: 
+        application/json: 
+          schema: 
+            $ref: "#/components/schemas/Error"
