@@ -13,4 +13,5 @@ router.post(
 );
 router.get("/getList",auth.checkAuth,transactionController.list);
 router.get("/getData/:address",auth.checkAuth,transactionController.getData);
+ 
 module.exports = router;

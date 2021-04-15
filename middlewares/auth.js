@@ -6,7 +6,7 @@ var db = require("../config/db");
 const tblThirdParty = require("../app/modules/third_party/schemas/thirdPartySchema");
 var authMiddleware = {
   checkAuth: async (req, res, next) => {
-    console.log("headers:", req.headers);
+    //console.log("headers:", req.headers);
     if (
       req.headers.authorization != undefined &&
       req.headers.authorization != ""
@@ -23,6 +23,9 @@ var authMiddleware = {
             });
 
             if (userData != null) {
+              if(req.headers.authtoken != undefined){
+                userData.dataValues.authtoken=req.headers.authtoken;
+              }
               req.user = userData.dataValues;
               next();
             } else {

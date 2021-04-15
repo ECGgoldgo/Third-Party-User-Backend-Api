@@ -6,7 +6,7 @@ const bodyparser = require("body-parser");
 
 const cors = require("cors"); // by using this can access from any server
 const path = require("path");
-// const passport = require("passport");
+const passport = require("passport");
 const expressValidator = require("express-validator");
 
 const YAML = require("yamljs");
@@ -25,10 +25,20 @@ var thirdPartyRoute = require("./app/modules/third_party/thirdPartyRoute");
 var priceRoute = require("./app/modules/prices/priceRoute");
 var transactionRoute = require("./app/modules/transactions/transactionRoute");
 var cloudHsmRoute = require("./app/modules/cloudhsm/cloudHsmRoute");
+var blockchainRoute = require("./app/modules/blockchain/blockchainRoute");
+
+/* revx crm routes files include*/
+var revixUserRoute = require("./app/modules/revx/revixRoute");
+var revixBlockchainRoute = require("./app/modules/revx_blockchain/blockchainRoute");
+var revixUsersRoute = require("./app/modules/users/userRoute");
+
 
 const PORT = process.env.PORT || 8081;
 var server = require("http").createServer(app);
 app.use(cors());
+app.use(passport.initialize());
+app.use(passport.session());
+require("./middlewares/passport")(passport);
 app.use("/api-swagger", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use("/rest-api-swagger", swaggerUi.serve, swaggerUi.setup(swaggerGogoDocument));
 
@@ -60,6 +70,14 @@ app.use("/api/v1/users", thirdPartyRoute);
 app.use("/api/v1/price", priceRoute);
 app.use("/api/v1/transaction", transactionRoute);
 app.use("/api/v1/cloudhsm", cloudHsmRoute);
+app.use("/api/v1/blockchain", blockchainRoute);
+
+/* revx crm routes*/
+app.use("/api/v1/revx", revixUserRoute);
+app.use("/api/v1/revx/blockchain", revixBlockchainRoute);
+app.use("/api/v1/revx/users", revixUsersRoute);
+
+
 
 app.use("/api/v1/static", express.static("public"));
 

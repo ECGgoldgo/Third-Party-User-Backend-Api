@@ -6,6 +6,7 @@ var ETH = require("../../../helpers/eth");
 let eth = new ETH(config.ERC20_TOKEN_ABI, config.TOKEN_CONTRACT);
 const tblTransactions= require("../schemas/restApiTransactionSchema");
 const dbHelper =require("../../../helpers/dbhelper");
+var axios = require('axios');
 module.exports = {
   transactions: async (req, res, next) => {
     try {
@@ -190,7 +191,7 @@ module.exports = {
       req.query.sortBy == undefined ? (req.query.sortBy = "created_at") : "";
       console.log(req.query.searchKey);
       console.log(req.query);
-      let where=`(from_id=${userId} OR to_id=${userId} OR from_adrs IN (SELECT address from cloud_user_wallets where user_id=1) OR to_adrs IN (SELECT address from cloud_user_wallets where user_id=1))`;
+      let where=`(from_id=${userId} OR to_id=${userId} OR from_adrs IN (SELECT address from cloud_user_wallets where user_id=${userId}) OR to_adrs IN (SELECT address from cloud_user_wallets where user_id=${userId}))`;
       tblTransactions.findAndCountAll({
         where:sequelize.literal(where),
         order: [[req.query.sortBy, req.query.order]],
@@ -231,7 +232,8 @@ module.exports = {
     try {
       console.log('user data',req.user);
       let user_id=req.user.id;
-      let where=`(from_id=${user_id} OR from_adrs LIKE '%${req.params.address}%')`;
+      //from_id=${user_id} OR
+      let where=`(from_adrs LIKE '%${req.params.address}%')`;
       let sendTokens= await tblTransactions.findAll({
         attributes: [
           [sequelize.fn('sum', sequelize.col('amount')), 'total_amount'],
@@ -240,8 +242,8 @@ module.exports = {
       });
       // console.log('sendTokensddd',sendTokens[0].dataValues);
       sendTokens=sendTokens[0].dataValues.total_amount!=null ? sendTokens[0].dataValues.total_amount :0;
-
-      let received_where=`(to_id=${user_id} OR to_adrs LIKE '%${req.params.address}%')`;
+      //to_id=${user_id} OR 
+      let received_where=`(to_adrs LIKE '%${req.params.address}%')`;
       let  receivedTokens= await tblTransactions.findAll({
         attributes: [
           [sequelize.fn('sum', sequelize.col('amount')), 'total_amount'],
@@ -263,5 +265,5 @@ module.exports = {
         .status(400)
         .send({ status: false, data: `${error}`, message: error.message });
     }
-  }
+  } 
 };

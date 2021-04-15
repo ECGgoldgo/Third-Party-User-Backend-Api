@@ -17,5 +17,6 @@ router.post("/saveWallet",auth.checkAuth,thirdPartyRules.saveWallet,thirdPartyCo
 router.get("/changeWallet/:id", auth.checkAuth, thirdPartyController.changeWallet);
 
 router.get("/walletList",auth.checkAuth,thirdPartyController.walletList);
+router.get("/defaultAddress",auth.checkAuth,thirdPartyController.getDefaultWallet);
 
 module.exports = router;

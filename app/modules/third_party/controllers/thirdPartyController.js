@@ -247,4 +247,30 @@ module.exports = {
         .send({ status: false, data: `${error}`, message: error.message });
     }
   },
+  /* get default wallet*/
+  getDefaultWallet:async(req,res,next)=>{
+    try {
+      var user_id = req.user.id;
+      tblCloudUserWallets.findOne({
+        where: { user_id: user_id ,status:"1"},
+      })
+        .then(function(dbRes) {
+          let returnOp = {
+            status: true,
+            statusCode: 200,
+            message: "wallet default address get successfully.",
+            data: dbRes,
+          };
+          return res.json(returnOp);
+        })
+        .catch((err) => {
+          console.log(err);
+          returnOP.fail(res, 500, "Something went wrong", err);
+        });
+    } catch (error) {
+      return res
+        .status(400)
+        .send({ status: false, data: `${error}`, message: error.message });
+    }
+  }
 };
